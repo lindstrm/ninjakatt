@@ -94,36 +94,28 @@ module.exports = class Base {
     global.emitter.register(event, callback, this.name);
   }
 
-  logMessage(message, type, color) {
-    global.emitter.emit('message', message, type, this.name, color);
+  logMessage(message, type, extras = {}) {
+    global.emitter.emit('message', message, type, this.name, extras);
   }
 
   logError(message) {
-    this.logMessage(message, 'error', 'red');
+    this.logMessage(message, 'error', { color: 'red' });
   }
 
   logWarn(message) {
-    this.logMessage(message, 'warn', 'orange');
+    this.logMessage(message, 'warn', { color: 'orange' });
   }
 
-  logInfo(message) {
-    this.logMessage(message, 'info', 'cyan');
-  }
-
-  logRemoval(message) {
-    this.logMessage(message, 'info', 'red')
-  }
-
-  logAddition(message) {
-    this.logMessage(message, 'info', 'green');
+  logInfo(message, extras = { color: 'cyan' }) {
+    this.logMessage(message, 'info', extras);
   }
 
   logDebug(message) {
-    this.logMessage(message, 'debug', 'white');
+    this.logMessage(message, 'debug', { color: 'white' });
   }
 
   logDiag(message) {
-    this.logMessage(message, 'diag', 'grey');
+    this.logMessage(message, 'diag', { color: 'grey' });
   }
 
   get installable() {

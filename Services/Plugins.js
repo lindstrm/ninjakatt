@@ -34,7 +34,7 @@ module.exports = class PluginService extends EventEmitter {
 
   async loadPlugins() {
     const plugins = await this.getPlugins();
-    plugins.forEach((name) => {
+    plugins.filter(name => global.activePlugins ? global.activePlugins.includes(name) : true).forEach((name) => {
       const plugin = require(path.resolve(this.pluginsPath, name));
       Object.appendChain(plugin.prototype, new BasePlugin());
       this._uninstalled[plugin.name] = plugin;

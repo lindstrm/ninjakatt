@@ -24,6 +24,10 @@ module.exports = class PluginService extends EventEmitter {
     return Object.keys(this._installed);
   }
 
+  get pluginsPath() {
+    return global.pluginDir ? path.resolve(global.pluginDir) : path.resolve(global.appRoot, '..')
+  }
+
   has(pluginName) {
     return this._installed.hasOwnProperty(pluginName);
   }
@@ -31,7 +35,7 @@ module.exports = class PluginService extends EventEmitter {
   async loadPlugins() {
     const plugins = await this.getPlugins();
     plugins.forEach((name) => {
-      const plugin = require(path.resolve(global.appRoot, '..', name));
+      const plugin = require(path.resolve(this.pluginsPath, name));
       Object.appendChain(plugin.prototype, new BasePlugin());
       this._uninstalled[plugin.name] = plugin;
     });
@@ -40,7 +44,7 @@ module.exports = class PluginService extends EventEmitter {
 
   getPlugins() {
     return new Promise((resolve, reject) => {
-      let plugins = fs.readdirSync(path.resolve(global.appRoot, '..'));
+      let plugins = fs.readdirSync(this.pluginsPath);
       plugins = plugins.filter(
         (pkg) => pkg.match(/ninjakatt-plugin-/) && !pkg.match('base')
       );

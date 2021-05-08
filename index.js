@@ -14,6 +14,10 @@ global.appRoot = path.resolve(__dirname);
 global.settingsPath = path.resolve(process.env.APPDATA, 'ninjakatt');
 global.settings = path.resolve(global.settingsPath, 'settings.json');
 
+if (process.env.PLUGINDIR) {
+  global.pluginDir = path.resolve(process.env.PLUGINDIR);
+}
+
 const Ninjakatt = require('./Ninjakatt');
 const ninjakatt = new Ninjakatt();
 global.Ninjakatt = ninjakatt;
@@ -28,51 +32,6 @@ switch (command) {
 
     if (subcommand === 'list') {
       ninjakatt.plugins.getPlugins().then(plugins => console.log(plugins));
-    }
-    break;
-  }
-
-  case 'service': {
-    const Service = require('node-windows').Service;
-    const svc = new Service({
-      name: pkg.name,
-      description: pkg.name,
-      script: path.join(__dirname, 'index.js'),
-      wait: 2,
-      grow: 0.5,
-      env: [
-        {
-          name: 'APPDATA',
-          value: process.env['APPDATA']
-        }
-      ]
-    });
-
-    svc.on('start', function() {
-      console.log(`${svc.name} service started.`);
-    });
-
-    if (subcommand === 'install') {
-      svc.on('install', function() {
-        console.log(`${svc.name} service installed.`);
-        svc.start();
-      });
-      svc.on('alreadyinstalled', function() {
-        console.log(`${svc.name} is already installed as service`);
-      });
-
-      svc.install();
-    } else if (subcommand === 'uninstall') {
-      svc.on('uninstall', function() {
-        console.log(`${svc.name} service uninstalled.`);
-      });
-      svc.uninstall();
-    } else if (subcommand === 'restart') {
-      svc.stop();
-      svc.on('stop', function() {
-        console.log(`${svc.name} service stopped.`);
-        svc.start();
-      });
     }
     break;
   }

@@ -16,6 +16,8 @@ module.exports = class Base {
     }
   }
 
+  /********* Plugin Functions *********/
+
   checkRequiredProperties() {
     if (typeof this.setup !== 'function') {
       throw `Missing setup function in ${this.path}.`;

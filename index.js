@@ -14,7 +14,7 @@ global.appRoot = path.resolve(__dirname);
 global.settingsPath = path.resolve(process.env.APPDATA, 'ninjakatt');
 global.settings = path.resolve(global.settingsPath, 'settings.json');
 
-global.activePlugins = process.env.PLUGINS ? JSON.parse(process.env.PLUGINS) : undefined;
+global.activePlugins = process.env.PLUGINS;
 global.pluginDir = path.resolve(process.env.PLUGINDIR);
 
 const Ninjakatt = require('./Ninjakatt');

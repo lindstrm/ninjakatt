@@ -33,8 +33,9 @@ module.exports = class PluginService extends EventEmitter {
   }
 
   async loadPlugins() {
-    const plugins = await this.getPlugins();
-    plugins.filter(name => global.activePlugins ? global.activePlugins.includes(name) : true).forEach((name) => {
+    let plugins = await this.getPlugins();
+    plugins = plugins.filter(name => global.activePlugins ? global.activePlugins.includes(name.replace('ninjakatt-plugin-', '')) : true)
+    plugins.forEach((name) => {
       const plugin = require(path.resolve(this.pluginsPath, name));
       Object.appendChain(plugin.prototype, new BasePlugin());
       this._uninstalled[plugin.name] = plugin;

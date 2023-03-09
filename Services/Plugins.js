@@ -15,7 +15,6 @@ module.exports = class PluginService extends EventEmitter {
       if (settings === '') {
         fs.writeJsonSync(userSettingsFile, {});
       }
-
       this.loadPlugins();
     });
   }
